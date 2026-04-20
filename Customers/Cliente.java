@@ -7,7 +7,7 @@ public class Cliente extends Thread {
 
     // Endereços das 3 lojas 
     private static final String[] ENDERECOS_LOJAS = {
-        "ip do paulo", "ip do paulo", "ip do paulo"        
+        "ip da loja", "ip da loja", "ip da loja"        
     };
     private static final int[] PORTAS_LOJAS = { 5001, 5002, 5003 };                                           
 
@@ -22,6 +22,4 @@ public class Cliente extends Thread {
         this.random = new Random();
         this.totalCompras = totalCompras;
     }
-
-   
 }
