@@ -1,3 +1,6 @@
+package Shops;
+
+// Veiculo.java
 public class Veiculo {
     private final String id;
     private final int estacaoOrigem;
@@ -7,7 +10,6 @@ public class Veiculo {
         this.estacaoOrigem = estacaoOrigem;
     }
 
-    // Serialização simples para envio via socket
     public String serializar() {
         return id + ":" + estacaoOrigem;
     }

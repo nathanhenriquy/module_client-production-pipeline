@@ -1,27 +1,29 @@
-import java.util.concurrent.Semaphore;
+package Shops;
 
+import java.util.concurrent.Semaphore;
+import java.util.LinkedList;
+import java.util.Queue;
+
+// EsteiraCircular.java
 public class EsteiraCircular {
-    private final Veiculo[] esteira;
-    private final int tamanho;
-    private int entrada = 0;
-    private int saida = 0;
+    private final Queue<Veiculo> esteira;
+    //private final Veiculo[] esteira;
+
+    //private int entrada = 0;
+    //private int saida = 0;
 
     private final Semaphore mutex  = new Semaphore(1);
-    private final Semaphore vazio;
+    //private final Semaphore vazio;
     private final Semaphore cheio;
 
-    public EsteiraCircular(int tamanho) {
-        this.tamanho = tamanho;
-        this.esteira = new Veiculo[tamanho];
-        this.vazio  = new Semaphore(tamanho);
+    public EsteiraCircular() {
+        this.esteira = new LinkedList<>();
         this.cheio  = new Semaphore(0);
     }
 
     public void inserir(Veiculo v) throws InterruptedException {
-        vazio.acquire();
         mutex.acquire();
-        esteira[entrada] = v;
-        entrada = (entrada + 1) % tamanho;
+        esteira.add(v);
         mutex.release();
         cheio.release();
     }
@@ -29,11 +31,9 @@ public class EsteiraCircular {
     public Veiculo retirar() throws InterruptedException {
         cheio.acquire();
         mutex.acquire();
-        Veiculo v = esteira[saida];
-        esteira[saida] = null;
-        saida = (saida + 1) % tamanho;
+        Veiculo v = esteira.poll();
         mutex.release();
-        vazio.release();
+
         return v;
     }
 
