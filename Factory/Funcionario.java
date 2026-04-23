@@ -68,7 +68,11 @@ public class Funcionario extends Thread {
             int posicao = esteiraCircular.inserirVeiculo(veiculo);
             
             // Log de produção
-            logger.logProducao(veiculo, posicao);
+            try {
+                logger.logProducao(veiculo, posicao);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             
             System.out.println("Funcionário " + id + " da estação " + estacaoId + 
                              " produziu " + veiculo);

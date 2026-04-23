@@ -23,9 +23,9 @@ public class Main {
         });
         monitorStatus.start();
         
-        // Aguardar por 60 segundos e então parar
+        // Aguardar por 300 segundos e então parar (5 minutos)
         try {
-            Thread.sleep(60000); // Executar por 1 minuto
+            Thread.sleep(300000); // Executar por 5 minutos
             
             System.out.println("\n=== FINALIZANDO SISTEMA ===");
             fabrica.pararProducao();

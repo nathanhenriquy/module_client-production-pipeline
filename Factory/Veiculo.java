@@ -34,6 +34,11 @@ public class Veiculo {
         this.timestampProducao = System.currentTimeMillis();
     }
     
+    // Método para serializar compatível com as outras branches
+    public String serializar() {
+        return "V" + id + ":" + estacaoId;
+    }
+    
     // Getters
     public int getId() { return id; }
     public String getCor() { return cor; }

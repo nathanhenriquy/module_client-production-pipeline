@@ -9,7 +9,7 @@ import java.util.Random;
 public class VendedorFabrica extends Thread {
     private final EsteiraCircular esteiraCircular;
     private final LoggerFactory logger;
-    private final String[] lojasPorts = {"8081", "8082", "8083"};
+    private final String[] lojasPorts = {"5001", "5002", "5003"};
     private final Random random = new Random();
     private volatile boolean ativo = true;
     
@@ -41,7 +41,7 @@ public class VendedorFabrica extends Thread {
             
             // Escolher loja aleatória
             String porta = lojasPorts[random.nextInt(lojasPorts.length)];
-            int lojaId = Integer.parseInt(porta) - 8080; // Converter porta para ID da loja
+            int lojaId = Integer.parseInt(porta) - 5000; // Converter porta para ID da loja (5001->1, 5002->2, 5003->3)
             
             // Conectar com a loja
             try (Socket socket = new Socket("localhost", Integer.parseInt(porta));

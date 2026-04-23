@@ -10,7 +10,7 @@ public class Fabrica {
     private final EsteiraCircular esteiraCircular;
     private final LoggerFactory logger;
     private final List<EstacaoProducao> estacoes;
-    private final VendedorFabrica vendedor;
+    private final ServidorFabrica servidor;
     
     public Fabrica() {
         this.estoque = new EstoqueFactory();
@@ -18,7 +18,7 @@ public class Fabrica {
         this.esteiraCircular = new EsteiraCircular();
         this.logger = new LoggerFactory();
         this.estacoes = new ArrayList<>();
-        this.vendedor = new VendedorFabrica(esteiraCircular, logger);
+        this.servidor = new ServidorFabrica(esteiraCircular, logger);
         
         inicializarEstacoes();
     }
@@ -41,27 +41,27 @@ public class Fabrica {
         System.out.println("Estoque inicial: " + estoque.getQuantidadePecas() + " peças");
         System.out.println("Capacidade da esteira circular: " + esteiraCircular.getCapacidade() + " veículos");
         
+        // Iniciar servidor para atender lojas
+        servidor.start();
+        
         for (EstacaoProducao estacao : estacoes) {
             estacao.iniciarProducao();
         }
-        
-        // Iniciar vendedor
-        vendedor.start();
     }
     
     public void pararProducao() {
         System.out.println("=== PARANDO PRODUÇÃO DA FÁBRICA ===");
         
-        // Parar vendedor
-        vendedor.parar();
+        // Parar servidor
+        servidor.parar();
         
         for (EstacaoProducao estacao : estacoes) {
             estacao.pararProducao();
         }
         
-        // Aguardar vendedor terminar
+        // Aguardar servidor terminar
         try {
-            vendedor.join();
+            servidor.join();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
