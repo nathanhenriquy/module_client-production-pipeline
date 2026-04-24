@@ -13,19 +13,18 @@ public class Cliente extends Thread {
     private int idCliente;
     private Garagem garagem;
     private Random random;
-    private int totalCompras;
+   
 
-    public Cliente(int idCliente, int totalCompras) {
+    public Cliente(int idCliente) {
         this.idCliente = idCliente;
         this.garagem = new Garagem();
-        this.random = new Random();
-        this.totalCompras = totalCompras;
+        this.random = new Random();      
     }
 
     @Override
     public void run() {
         try {
-            for (int i = 0; i < totalCompras; i++) {
+            while (true) {  
                 int lojaEscolhida = random.nextInt(3);
 
                 System.out.println("[CLIENTE " + idCliente + "] Tentando comprar na Loja " + (lojaEscolhida + 1));
@@ -40,10 +39,6 @@ public class Cliente extends Thread {
 
                 sleep(random.nextInt(2000) + 500);
             }
-
-            System.out.println("[CLIENTE " + idCliente + "] Encerrou. Total na garagem: "
-                + garagem.disponiveis());
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
