@@ -2,6 +2,8 @@ package Factory;
 
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ServidorFabrica extends Thread {
     private static final int PORTA_FABRICA = 6000;
@@ -10,10 +12,16 @@ public class ServidorFabrica extends Thread {
     private volatile boolean ativo = true;
     private ServerSocket serverSocket;
     
+    private final ConcurrentHashMap<Integer, AtomicInteger> posicaoEsteiraLojas = new ConcurrentHashMap<>();
+    
     public ServidorFabrica(EsteiraCircular esteiraCircular, LoggerFactory logger) {
         this.esteiraCircular = esteiraCircular;
         this.logger = logger;
         this.setName("ServidorFabrica");
+        
+        posicaoEsteiraLojas.put(1, new AtomicInteger(0));
+        posicaoEsteiraLojas.put(2, new AtomicInteger(0));
+        posicaoEsteiraLojas.put(3, new AtomicInteger(0));
     }
     
     @Override
@@ -25,7 +33,6 @@ public class ServidorFabrica extends Thread {
             while (ativo) {
                 try {
                     Socket clientSocket = serverSocket.accept();
-                    // Processar cada solicitação em thread separada
                     new Thread(() -> atenderLoja(clientSocket)).start();
                 } catch (IOException e) {
                     if (ativo) {
@@ -46,26 +53,26 @@ public class ServidorFabrica extends Thread {
             System.out.println("[FABRICA] Recebida solicitação: " + mensagem);
             
             if (mensagem != null && mensagem.startsWith("SOLICITAR:")) {
-                // Extrair ID da loja da mensagem
                 String lojaIdStr = mensagem.substring("SOLICITAR:".length());
                 int lojaId = Integer.parseInt(lojaIdStr);
                 
                 try {
-                    // Pegar veículo da esteira
                     Veiculo veiculo = esteiraCircular.removerVeiculo();
                     
-                    // Enviar veículo serializado
                     String veiculoSerializado = veiculo.serializar();
                     out.println("VEICULO:" + veiculoSerializado);
                     
-                    // Log de venda
+                    AtomicInteger contadorLoja = posicaoEsteiraLojas.computeIfAbsent(lojaId, k -> new AtomicInteger(0));
+                    int posicaoEsteiraLoja = contadorLoja.getAndIncrement();
+                    
                     try {
-                        logger.logVenda(veiculo, -1, lojaId, -1);
+                        logger.logVenda(veiculo, -1, lojaId, posicaoEsteiraLoja);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                     }
                     
-                    System.out.println("[FABRICA] Enviado veículo " + veiculo + " para loja " + lojaId);
+                    System.out.println("[FABRICA] Enviado veículo " + veiculo + " para loja " + lojaId +
+                                     " (posição esteira loja: " + posicaoEsteiraLoja + ")");
                     
                 } catch (InterruptedException e) {
                     out.println("ERRO:Sem veículos disponíveis");

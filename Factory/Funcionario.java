@@ -33,7 +33,7 @@ public class Funcionario extends Thread {
         while (ativo) {
             try {
                 produzirVeiculo();
-                Thread.sleep(2000 + (int)(Math.random() * 3000)); // Intervalo entre produções
+                Thread.sleep(2000 + (int)(Math.random() * 3000));
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
@@ -42,7 +42,6 @@ public class Funcionario extends Thread {
     }
     
     private void produzirVeiculo() throws InterruptedException {
-        // Solução para evitar deadlock: funcionário com id par pega primeiro ferramenta esquerda
         if (id % 2 == 0) {
             ferramentaEsquerda.acquire();
             ferramentaDireita.acquire();
@@ -55,19 +54,14 @@ public class Funcionario extends Thread {
             System.out.println("Funcionário " + id + " da estação " + estacaoId + 
                              " adquiriu ambas as ferramentas");
             
-            // Solicitar peça via esteira
             esteiraDistribuicao.solicitarPeca(estacaoId);
             
-            // Simular produção do veículo
             Thread.sleep(1000 + (int)(Math.random() * 2000));
             
-            // Criar veículo
             Veiculo veiculo = new Veiculo(estacaoId, id);
             
-            // Inserir na esteira circular
             int posicao = esteiraCircular.inserirVeiculo(veiculo);
             
-            // Log de produção
             try {
                 logger.logProducao(veiculo, posicao);
             } catch (InterruptedException e) {

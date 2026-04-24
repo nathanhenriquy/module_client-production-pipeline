@@ -13,10 +13,10 @@ public class EsteiraDistribuicao {
     }
     
     public void solicitarPeca(int estacaoId) throws InterruptedException {
-        capacidadeEsteira.acquire(); // Limita a 5 solicitações simultâneas
+        capacidadeEsteira.acquire();
         try {
             System.out.println("Estação " + estacaoId + " solicitou peça via esteira");
-            Thread.sleep(100); // Simula tempo de transporte na esteira
+            Thread.sleep(100);
             estoque.retirarPeca();
             System.out.println("Peça entregue à estação " + estacaoId);
         } finally {

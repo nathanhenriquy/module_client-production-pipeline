@@ -9,13 +9,13 @@ public class EstoqueFactory {
     private final Semaphore pecasDisponiveis;
     
     public EstoqueFactory() {
-        this.quantidadePecas = CAPACIDADE_MAXIMA; // Inicia com estoque completo
+        this.quantidadePecas = CAPACIDADE_MAXIMA;
         this.mutex = new Semaphore(1);
         this.pecasDisponiveis = new Semaphore(CAPACIDADE_MAXIMA);
     }
     
     public void retirarPeca() throws InterruptedException {
-        pecasDisponiveis.acquire(); // Espera ter peças disponíveis
+        pecasDisponiveis.acquire();
         mutex.acquire();
         try {
             if (quantidadePecas > 0) {

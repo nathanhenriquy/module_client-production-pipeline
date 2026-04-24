@@ -27,21 +27,19 @@ public class EstacaoProducao {
     }
     
     private void inicializarFerramentas() {
-        // Criar 5 ferramentas (uma entre cada par de funcionários adjacentes)
         for (int i = 0; i < NUM_FUNCIONARIOS; i++) {
-            ferramentas.add(new Semaphore(1)); // Cada ferramenta pode ser usada por apenas 1 funcionário
+            ferramentas.add(new Semaphore(1));
         }
     }
     
     private void inicializarFuncionarios() {
         for (int i = 0; i < NUM_FUNCIONARIOS; i++) {
-            // Ferramenta esquerda e direita para cada funcionário (estrutura circular)
             Semaphore ferramentaEsquerda = ferramentas.get(i);
             Semaphore ferramentaDireita = ferramentas.get((i + 1) % NUM_FUNCIONARIOS);
             
             Funcionario funcionario = new Funcionario(
-                i + 1, // ID do funcionário (1-5)
-                id,    // ID da estação
+                i + 1,
+                id,
                 ferramentaEsquerda,
                 ferramentaDireita,
                 esteiraDistribuicao,
@@ -66,7 +64,6 @@ public class EstacaoProducao {
             funcionario.parar();
         }
         
-        // Aguardar todos os funcionários terminarem
         for (Funcionario funcionario : funcionarios) {
             try {
                 funcionario.join();

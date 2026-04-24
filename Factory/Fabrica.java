@@ -41,7 +41,6 @@ public class Fabrica {
         System.out.println("Estoque inicial: " + estoque.getQuantidadePecas() + " peças");
         System.out.println("Capacidade da esteira circular: " + esteiraCircular.getCapacidade() + " veículos");
         
-        // Iniciar servidor para atender lojas
         servidor.start();
         
         for (EstacaoProducao estacao : estacoes) {
@@ -52,14 +51,12 @@ public class Fabrica {
     public void pararProducao() {
         System.out.println("=== PARANDO PRODUÇÃO DA FÁBRICA ===");
         
-        // Parar servidor
         servidor.parar();
         
         for (EstacaoProducao estacao : estacoes) {
             estacao.pararProducao();
         }
         
-        // Aguardar servidor terminar
         try {
             servidor.join();
         } catch (InterruptedException e) {

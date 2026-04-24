@@ -23,9 +23,8 @@ public class VendedorFabrica extends Thread {
     public void run() {
         while (ativo) {
             try {
-                // Tentar vender um veículo
                 venderVeiculo();
-                Thread.sleep(3000 + random.nextInt(5000)); // Intervalo entre vendas
+                Thread.sleep(3000 + random.nextInt(5000));
                 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -36,19 +35,15 @@ public class VendedorFabrica extends Thread {
     
     private void venderVeiculo() {
         try {
-            // Remover veículo da esteira da fábrica
             Veiculo veiculo = esteiraCircular.removerVeiculo();
             
-            // Escolher loja aleatória
             String porta = lojasPorts[random.nextInt(lojasPorts.length)];
-            int lojaId = Integer.parseInt(porta) - 5000; // Converter porta para ID da loja (5001->1, 5002->2, 5003->3)
+            int lojaId = Integer.parseInt(porta) - 5000;
             
-            // Conectar com a loja
-            try (Socket socket = new Socket("localhost", Integer.parseInt(porta));
+            try (Socket socket = new Socket("10.130.43.2", Integer.parseInt(porta));
                  ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
                  ObjectInputStream input = new ObjectInputStream(socket.getInputStream())) {
                 
-                // Criar objeto de informação do veículo
                 VeiculoInfo veiculoInfo = new VeiculoInfo(
                     veiculo.getId(),
                     veiculo.getCor(),
@@ -58,28 +53,21 @@ public class VendedorFabrica extends Thread {
                     veiculo.getTimestampProducao()
                 );
                 
-                // Enviar comando e veículo
                 output.writeObject("COMPRAR_VEICULO");
                 output.writeObject(veiculoInfo);
                 
-                // Receber resposta
                 String resposta = (String) input.readObject();
                 if ("SUCESSO".equals(resposta)) {
                     int posicaoLoja = input.readInt();
                     
-                    // Log de venda
                     logger.logVenda(veiculo, -1, lojaId, posicaoLoja);
                     System.out.println("Veículo vendido para loja " + lojaId + ": " + veiculo);
                 } else {
                     System.err.println("Falha ao vender veículo para loja " + lojaId);
-                    // Recolocar veículo na esteira (em uma implementação real)
-                    // esteiraCircular.inserirVeiculo(veiculo);
                 }
                 
             } catch (IOException | ClassNotFoundException e) {
                 System.err.println("Erro ao conectar com loja na porta " + porta + ": " + e.getMessage());
-                // Recolocar veículo na esteira (em uma implementação real)
-                // esteiraCircular.inserirVeiculo(veiculo);
             }
             
         } catch (InterruptedException e) {

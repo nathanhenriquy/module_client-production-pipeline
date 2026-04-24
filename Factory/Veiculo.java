@@ -1,7 +1,10 @@
 package Factory;
 
+import java.util.concurrent.Semaphore;
+
 public class Veiculo {
     private static int contadorId = 1;
+    private static final Semaphore mutexContadorId = new Semaphore(1);
     
     private final int id;
     private final String cor;
@@ -19,13 +22,19 @@ public class Veiculo {
     }
     
     public Veiculo(int estacaoId, int funcionarioId) {
-        this.id = contadorId++;
+        try {
+            mutexContadorId.acquire();
+            this.id = contadorId++;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread interrompida ao gerar ID", e);
+        } finally {
+            mutexContadorId.release();
+        }
         
-        // Alternando cores RGB
         Cor[] cores = Cor.values();
         this.cor = cores[(id - 1) % cores.length].name();
         
-        // Alternando tipos SUV e SEDAN
         Tipo[] tipos = Tipo.values();
         this.tipo = tipos[(id - 1) % tipos.length].name();
         
@@ -34,12 +43,10 @@ public class Veiculo {
         this.timestampProducao = System.currentTimeMillis();
     }
     
-    // Método para serializar compatível com as outras branches
     public String serializar() {
         return "V" + id + ":" + estacaoId;
     }
     
-    // Getters
     public int getId() { return id; }
     public String getCor() { return cor; }
     public String getTipo() { return tipo; }

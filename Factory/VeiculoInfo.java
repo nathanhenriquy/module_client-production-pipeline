@@ -21,7 +21,6 @@ public class VeiculoInfo implements Serializable {
         this.timestampProducao = timestampProducao;
     }
     
-    // Getters
     public int getId() { return id; }
     public String getCor() { return cor; }
     public String getTipo() { return tipo; }
