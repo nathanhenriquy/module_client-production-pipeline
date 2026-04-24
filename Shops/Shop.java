@@ -9,15 +9,18 @@ import java.util.concurrent.Semaphore;
 public class Shop implements Runnable {
     private final int id;
     private final int porta;
-    private final String fabricaUrl;
+    //private final String fabricaUrl;
+    private final String fabricaHost;
+    private final int fabricaPorta;
     private final EsteiraCircular esteira;
 
     private final Semaphore mutexFabrica = new Semaphore(1);
 
-    public Shop(int id, int porta, String fabricaUrl) {
+    public Shop(int id, int porta, String fabricaHost, int fabricaPorta) {
         this.id = id;
         this.porta = porta;
-        this.fabricaUrl = fabricaUrl;
+        this.fabricaHost = fabricaHost;
+        this.fabricaPorta = fabricaPorta;
         this.esteira = new EsteiraCircular();
     }
 
