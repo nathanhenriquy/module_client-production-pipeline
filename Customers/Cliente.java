@@ -6,7 +6,7 @@ import java.util.Random;
 public class Cliente extends Thread {
 
     private static final String[] ENDERECOS_LOJAS = {
-        "ip do paulo", "ip do paulo", "ip do paulo"
+        "ip das lojas", "ip das lojas", "ip das lojas"
     };
     private static final int[] PORTAS_LOJAS = { 5001, 5002, 5003 };
 
@@ -37,7 +37,7 @@ public class Cliente extends Thread {
                         + " | Garagem: " + garagem.disponiveis());
                 }
 
-                sleep(random.nextInt(2000) + 500);
+                sleep(2000);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
