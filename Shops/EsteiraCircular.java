@@ -4,7 +4,6 @@ import java.util.concurrent.Semaphore;
 import java.util.LinkedList;
 import java.util.Queue;
 
-// EsteiraCircular.java
 public class EsteiraCircular {
     private final Queue<Veiculo> esteira;
     

@@ -1,6 +1,5 @@
 package Shops;
 
-// Main.java
 public class Main {
     private static final String FABRICA_HOST = "localhost";
     private static final int    FABRICA_PORTA = 6000;

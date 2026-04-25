@@ -5,11 +5,9 @@ import java.net.*;
 import java.util.concurrent.Semaphore;
 
 
-// Shop.java
 public class Shop implements Runnable {
     private final int id;
     private final int porta;
-    //private final String fabricaUrl;
     private final String fabricaHost;
     private final int fabricaPorta;
     private final EsteiraCircular esteira;

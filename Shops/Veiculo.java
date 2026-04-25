@@ -1,6 +1,5 @@
 package Shops;
 
-// Veiculo.java
 public class Veiculo {
     private final int id;
     private final String cor;
