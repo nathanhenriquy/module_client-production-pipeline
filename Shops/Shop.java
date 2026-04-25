@@ -34,11 +34,13 @@ public class Shop implements Runnable {
 
         try (ServerSocket servidor = new ServerSocket(porta)) {
             while (true) {
+
                 Socket clienteSocket = servidor.accept();
 
                 Thread atendimento = new Thread(() -> atenderCliente(clienteSocket));
                 atendimento.setDaemon(true);
                 atendimento.start();
+                
             }
         } catch (IOException e) {
             System.err.println("[Loja " + id + "] Erro no servidor: " + e.getMessage());

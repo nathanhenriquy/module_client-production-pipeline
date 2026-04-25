@@ -7,13 +7,8 @@ import java.util.Queue;
 // EsteiraCircular.java
 public class EsteiraCircular {
     private final Queue<Veiculo> esteira;
-    //private final Veiculo[] esteira;
-
-    //private int entrada = 0;
-    //private int saida = 0;
-
+    
     private final Semaphore mutex  = new Semaphore(1);
-    //private final Semaphore vazio;
     private final Semaphore cheio;
 
     public EsteiraCircular() {
