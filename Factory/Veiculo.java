@@ -44,7 +44,7 @@ public class Veiculo {
     }
     
     public String serializar() {
-        return "V" + id + ":" + estacaoId;
+        return id + ":" + estacaoId + ":" + funcionarioId + ":" + cor + ":" + tipo + ":" + timestampProducao;
     }
     
     public int getId() { return id; }
